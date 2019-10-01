@@ -1,0 +1,23 @@
+
+; printing object ENDGCODE
+; Last updated 20191001
+
+G4 ; wait
+M220 S100 ; reset speed factor to 100%
+M221 S100 ; reset extruder factor to 100%
+M900 K0 ; reset linear acceleration
+
+; Retract and move exturder
+G92 E0 ; prepare to retract
+G1 E{retract_length[0]} F4800; retract quickly to avoid ooze
+{if layer_z < max_print_height}G1 Z{z_offset+min(layer_z+60, max_print_height)}{endif} ; Move print head up
+G0 X20 Y200 F10200; present bed
+
+; Turn heaters off
+M104 S0 ; turn off temperature
+M140 S0 ; turn off heatbed
+M107 ; turn off fan
+
+; Disable Motors
+M84 ; disable motors
+M300 S100 P10 ; chirp
